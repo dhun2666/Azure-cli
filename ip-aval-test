@@ -8,6 +8,8 @@ read MyVNet
 echo what is your subnet ?
 read MySubnet
 
+Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
+
 subnet_prefix=$(az network vnet subnet show -g $MyResourceGroup -n $MySubnet --vnet-name $MyVNet --query "[addressPrefix]" -o tsv)
 
 BASE_IP=${subnet_prefix%/*}
@@ -36,5 +38,5 @@ seq ${ipstart} ${ipend} | while read i; do
         echo "IP = $ip2 is avilable"
         echo $ip2 >>$MySubnet.csv
     fi
-    
+Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "false"    
 done
