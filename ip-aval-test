@@ -35,6 +35,5 @@ seq ${ipstart} ${ipend} | while read i; do
     then
         echo "IP = $ip2 is avilable"
         echo $ip2 >>$MySubnet.csv
-    fi
-Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "false"    
+    fi   
 done
