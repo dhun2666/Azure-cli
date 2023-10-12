@@ -8,7 +8,7 @@ read MyVNet
 echo what is your subnet ?
 read MySubnet
 
-//subnet_prefix=$(az network vnet subnet show -g $MyResourceGroup -n $MySubnet --vnet-name $MyVNet --query "[addressPrefix]" -o tsv --only-show-errors)
+#subnet_prefix=$(az network vnet subnet show -g $MyResourceGroup -n $MySubnet --vnet-name $MyVNet --query "[addressPrefix]" -o tsv --only-show-errors)
 subnet_prefix=$(az network vnet subnet show -g $MyResourceGroup -n $MySubnet --vnet-name $MyVNet --query "[addressPrefix]" --only-show-errors)
 
 BASE_IP=${subnet_prefix%/*}
@@ -30,12 +30,12 @@ ipend=$(((${ipstart} | ~${IP_MASK}) & 0x7FFFFFFF))
 
 seq ${ipstart} ${ipend} | while read i; do
     ip2=$a.$((($i & 0xFF0000) >> 16)).$((($i & 0xFF00) >> 8)).$(($i & 0x00FF))
-    //availability=$(az network vnet check-ip-address --ip-address $ip2 --resource-group $MyResourceGroup --name $MyVNet --query "[available]" -o tsv  --only-show-errors)
+    #availability=$(az network vnet check-ip-address --ip-address $ip2 --resource-group $MyResourceGroup --name $MyVNet --query "[available]" -o tsv  --only-show-errors)
     availability=$(az network vnet check-ip-address --ip-address $ip2 --resource-group $MyResourceGroup --name $MyVNet --query "[available]" --only-show-errors)
 
     if [ "$availability" = "true" ]; 
     then
         echo "IP = $ip2 is avilable"
-        //echo $ip2 >>$MySubnet.csv
+        #echo $ip2 >>$MySubnet.csv
     fi   
 done
