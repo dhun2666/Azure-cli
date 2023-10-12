@@ -8,9 +8,7 @@ read MyVNet
 echo what is your subnet ?
 read MySubnet
 
-Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
-
-subnet_prefix=$(az network vnet subnet show -g $MyResourceGroup -n $MySubnet --vnet-name $MyVNet --query "[addressPrefix]" -o tsv)
+subnet_prefix=$(az network vnet subnet show -g $MyResourceGroup -n $MySubnet --vnet-name $MyVNet --query "[addressPrefix]" -o tsv --only-show-errors)
 
 BASE_IP=${subnet_prefix%/*}
 IP_CIDR=${subnet_prefix#*/}
@@ -31,7 +29,7 @@ ipend=$(((${ipstart} | ~${IP_MASK}) & 0x7FFFFFFF))
 
 seq ${ipstart} ${ipend} | while read i; do
     ip2=$a.$((($i & 0xFF0000) >> 16)).$((($i & 0xFF00) >> 8)).$(($i & 0x00FF))
-    availability=$(az network vnet check-ip-address --ip-address $ip2 --resource-group $MyResourceGroup --name $MyVNet --query "[available]" -o tsv)
+    availability=$(az network vnet check-ip-address --ip-address $ip2 --resource-group $MyResourceGroup --name $MyVNet --query "[available]" -o tsv  --only-show-errors)
 
     if [ "$availability" = "true" ]; 
     then
